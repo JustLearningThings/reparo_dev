@@ -1,0 +1,2 @@
+class NonNumericDataError(Exception):
+    pass
