@@ -1,6 +1,8 @@
+class NonNumericDataError(Exception):
+    pass
+
 class NoSuchDistanceMetricError(Exception):
     pass
 
-
-class NonNumericDataError(Exception):
+class AllSamplesHaveNaNsError(Exception):
     pass
