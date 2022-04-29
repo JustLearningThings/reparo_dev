@@ -24,6 +24,7 @@ class FRNNI(BaseEstimator, TransformerMixin):
         self.distances = ['euclidean', 'manhattan', 'chebyshev', 'minkowski', 'wminkowski', 'seuclidean', 'mahalanobis']
         self.n_neighbors = n_neighbors
         self.metric = metric
+        self.p = p
 
         if metric.lower() not in self.distances:
             raise NoSuchDistanceMetricError(f'{metric} metric isn\'t supported right now, choose one of the following: euclidean, manhattan, chebyshev, minkowski, wminkowski, seuclidean, mahalanobis.')
@@ -170,7 +171,10 @@ class FRNNI(BaseEstimator, TransformerMixin):
         X_temp = np.insert(X_temp, 0, temp, axis=0)
 
         # find the nearest neighbors
-        knn = NearestNeighbors(metric=metric)
+        if metric == 'minkowski':
+            knn = NearestNeighbors(metric=metric, p=self.p)
+        else:
+            knn = NearestNeighbors(metric=metric)
         knn.fit(X_temp)
         dist, neighbors = knn.kneighbors(n_neighbors=n_neighbors)
 
