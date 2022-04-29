@@ -6,3 +6,6 @@ class NoSuchDistanceMetricError(Exception):
 
 class AllSamplesHaveNaNsError(Exception):
     pass
+
+class SampleFullOfNaNs(Exception):
+    pass

@@ -9,7 +9,7 @@ from sklearn.neighbors import NearestNeighbors
 import pandas as pd
 import numpy as np
 
-from errors import NonNumericDataError, NoSuchDistanceMetricError, AllSamplesHaveNaNsError
+from errors import NonNumericDataError, NoSuchDistanceMetricError, AllSamplesHaveNaNsError, SampleFullOfNaNs
 
 class CDI(BaseEstimator, TransformerMixin):
     def __init__(self, n_neighbors: int = 5, metric: str = 'minkowski', p: int = 2, n_select: int = 1):
@@ -72,6 +72,10 @@ class CDI(BaseEstimator, TransformerMixin):
         X_new = X.copy()
 
         for i, sample in enumerate(X_new):
+            if np.isnan(sample).all():
+                error_text = f'Sample {i} is full of NaNs. Cannot operate with such samples. Consider removing the row.'
+                raise SampleFullOfNaNs(error_text)
+
             if np.isnan(sample).any():
                 # create a copy of the original array with deleted rows that contained nans
                 X_temp = X_new.copy()
